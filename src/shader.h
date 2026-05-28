@@ -1,3 +1,7 @@
+// ============================================================
+// КЛАСС SHADER - ЗАГРУЗКА И КОМПИЛЯЦИЯ ШЕЙДЕРОВ
+// ============================================================
+
 #pragma once
 
 #include <glad/glad.h>
@@ -9,8 +13,11 @@ public:
     Shader();
     ~Shader();
     
+    // Загрузка шейдеров из файлов
     bool load(const std::string& vertexPath, const std::string& fragmentPath);
     void use();
+    
+    // Установка uniform-переменных
     void setUniform(const std::string& name, int value);
     void setUniform(const std::string& name, float value);
     void setUniform(const std::string& name, const glm::mat4& matrix);

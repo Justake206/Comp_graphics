@@ -1,3 +1,7 @@
+// ============================================================
+// РЕАЛИЗАЦИЯ КЛАССА SHADER
+// ============================================================
+
 #include "shader.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
@@ -10,6 +14,10 @@ Shader::~Shader() {
     if (m_id) glDeleteProgram(m_id);
 }
 
+// ============================================================
+// ЗАГРУЗКА И КОМПИЛЯЦИЯ ШЕЙДЕРОВ
+// Чтение .glsl файлов → компиляция → линковка
+// ============================================================
 bool Shader::load(const std::string& vertexPath, const std::string& fragmentPath) {
     std::string vertexCode, fragmentCode;
     std::ifstream vFile, fFile;
@@ -35,17 +43,19 @@ bool Shader::load(const std::string& vertexPath, const std::string& fragmentPath
     const char* vCode = vertexCode.c_str();
     const char* fCode = fragmentCode.c_str();
     
-    unsigned int vertex, fragment;
-    vertex = glCreateShader(GL_VERTEX_SHADER);
+    // Компиляция вершинного шейдера
+    unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vCode, NULL);
     glCompileShader(vertex);
     if (!checkCompileErrors(vertex, "VERTEX")) return false;
     
-    fragment = glCreateShader(GL_FRAGMENT_SHADER);
+    // Компиляция фрагментного шейдера
+    unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fCode, NULL);
     glCompileShader(fragment);
     if (!checkCompileErrors(fragment, "FRAGMENT")) return false;
     
+    // Линковка шейдерной программы
     m_id = glCreateProgram();
     glAttachShader(m_id, vertex);
     glAttachShader(m_id, fragment);
